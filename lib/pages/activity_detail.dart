@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitness/components/next_step.dart';
 import 'package:fitness/models/exercise.dart';
 import 'package:fitness/pages/activity_timer.dart';
+import 'package:fitness/widgets/toast.dart';
 import 'package:flutter/material.dart';
 
 class ActivityDetail extends StatelessWidget {
@@ -27,8 +29,8 @@ class ActivityDetail extends StatelessWidget {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 270,
-                    child: Image.asset(
-                      this.exercise.image,
+                    child: CachedNetworkImage(
+                      imageUrl: this.exercise.image,
                       fit: BoxFit.fitHeight,
                     ),
                   ),
@@ -132,28 +134,28 @@ class ActivityDetail extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15.0),
-                        child: Column(
-                          children: <Widget>[
-                            NextStep(
-                              image: 'assets/images/image005.jpg',
-                              title: 'Plank',
-                              seconds: 50,
-                            ),
-                            NextStep(
-                              image: 'assets/images/image006.jpg',
-                              title: 'Push-ups',
-                              seconds: 50,
-                            ),
-                            NextStep(
-                              image: 'assets/images/image007.jpg',
-                              title: 'Lateral Raise',
-                              seconds: 50,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.only(top: 15.0),
+                      //   child: Column(
+                      //     children: <Widget>[
+                      //       NextStep(
+                      //         image: 'assets/images/image005.jpg',
+                      //         title: 'Plank',
+                      //         seconds: 50,
+                      //       ),
+                      //       NextStep(
+                      //         image: 'assets/images/image006.jpg',
+                      //         title: 'Push-ups',
+                      //         seconds: 50,
+                      //       ),
+                      //       NextStep(
+                      //         image: 'assets/images/image007.jpg',
+                      //         title: 'Lateral Raise',
+                      //         seconds: 50,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -187,12 +189,13 @@ class ActivityDetail extends StatelessWidget {
           ),
         ),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) {
-              return ActivityTimer(image:'assets/images/image001.jpg', tag: 'imageHeader');
-            }),
-          );
+          showToast("This feature would be added in subsequent versions");
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (_) {
+          //     return ActivityTimer(image:'assets/images/image001.jpg', tag: 'imageHeader');
+          //   }),
+          // );
         },
       ),
     );

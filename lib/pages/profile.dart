@@ -1,8 +1,10 @@
-import 'package:bezier_chart/bezier_chart.dart';
+// import 'package:bezier_chart/bezier_chart.dart';
+import 'package:fitness/backend/auth/logout.dart';
 import 'package:fitness/components/circle_bedge.dart';
 import 'package:fitness/components/utils/color_constant.dart';
 import 'package:fitness/widgets/curved_button.dart';
 import 'package:fitness/widgets/small_button.dart';
+import 'package:fitness/widgets/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
@@ -29,6 +31,8 @@ class ProfileState extends State<Profile> {
       });
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -59,29 +63,82 @@ class ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-
-                // Container(
-                //   padding: EdgeInsets.all(25.0),
-                //   width: width - 40.0,
-                //   margin: EdgeInsets.only(bottom: 30.0),
-                //   decoration: BoxDecoration(
-                //     color: Color.fromRGBO(241, 227, 255, 1.0),
-                //     borderRadius: BorderRadius.circular(15.0),
-                //   ),
-                //   child: Text(
-                //     'Preferences',
-                //     textAlign: TextAlign.center,
-                //     style: TextStyle(
-                //       color: Color.fromRGBO(190, 130, 255, 1.0),
-                //       fontSize: 20.0,
-                //       fontWeight: FontWeight.w900,
-                //     ),
-                //   ),
-                // ),
                 Container(
                   margin: EdgeInsets.all(25),
                   child: Form(
                       child: Column(children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Full name",
+                            style: TextStyle(fontFamily: "Geometria"),
+                          ),
+                          TextFormField(
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            cursorColor: Colors.black,
+                            onSaved: (height) {},
+                            decoration: InputDecoration(
+                              hintText: "Your Name",
+                              prefixIcon: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Icon(Icons.person)),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Email",
+                            style: TextStyle(fontFamily: "Geometria"),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                hintText: "Your Email",
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Icon(Icons.email),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Phone number",
+                            style: TextStyle(fontFamily: "Geometria"),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.done,
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                hintText: "Your Phone",
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Icon(Icons.phone),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
                     Container(
                       padding: EdgeInsets.all(10),
                       color: Colors.white,
@@ -165,7 +222,7 @@ class ProfileState extends State<Profile> {
                       height: 50,
                     ),
                     Container(
-                      padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
                         color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,30 +276,43 @@ class ProfileState extends State<Profile> {
                     Center(child: SmallButton(textonButton: "Update Details"))
                   ])),
                 ),
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 35.0),
+                InkWell(
+                  onTap: () {
+                    showTwoButtonAlertDialog(
+                        context,
+                        "Logout",
+                        "Are you sure you want to logout?",
+                        "Stay",
+                        "Logout",
+                        () {}, () {
+                      Logout(context);
+                    });
+                  },
                   child: Container(
-                    padding: EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          'Logout',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
+                    color: Colors.white,
+                    padding: EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 35.0),
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Logout',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                            ),
                           ),
-                        ),
-                        Icon(
-                          Icons.logout_outlined,
-                          color: Colors.white,
-                        ),
-                      ],
+                          Icon(
+                            Icons.logout_outlined,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

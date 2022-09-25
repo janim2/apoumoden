@@ -1,8 +1,23 @@
 import 'package:fitness/components/Header.dart';
 import 'package:fitness/components/tab_view_base.dart';
+import 'package:fitness/components/user_photo.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Diet extends StatelessWidget {
+class Diet extends StatefulWidget {
+  @override
+  DietState createState() => DietState();
+}
+
+class DietState extends State<Diet> {
+  String goal = "";
+  String user_id = "";
+  @override
+  void initState() {
+    FetchFromSharedPreferences();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,27 +29,26 @@ class Diet extends StatelessWidget {
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
-              flexibleSpace: Header(
-                'Diet',
-                rightSide: Container(
-                  height: 35.0,
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  margin: EdgeInsets.only(right: 20.0),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(100, 140, 255, 1.0),
-                    borderRadius: BorderRadius.circular(20.0),
+              flexibleSpace: Header('Diet - $goal', rightSide: UserPhoto()
+                  //  Container(
+                  //   height: 35.0,
+                  //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  //   margin: EdgeInsets.only(right: 20.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Color.fromRGBO(100, 140, 255, 1.0),
+                  //     borderRadius: BorderRadius.circular(20.0),
+                  //   ),
+                  //   child: Center(
+                  //     child: Text(
+                  //       'Tracker',
+                  //       style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontWeight: FontWeight.w900,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   ),
-                  child: Center(
-                    child: Text(
-                      'Tracker',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               bottom: TabBar(
                 tabs: <Widget>[
                   Container(
@@ -89,5 +103,13 @@ class Diet extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> FetchFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      goal = prefs.getString("goal")!;
+      user_id = prefs.getString("user_id")!;
+    });
   }
 }

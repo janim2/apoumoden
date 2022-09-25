@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness/components/daily_tip.dart';
 import 'package:fitness/components/image_card_with_basic_footer.dart';
 import 'package:fitness/components/image_card_with_internal.dart';
@@ -12,63 +13,10 @@ import 'package:flutter/material.dart';
 
 import '../../components/Header.dart';
 import '../../components/Section.dart';
+import '../../components/utils/math_utils.dart';
 import '../../widgets/info_banner.dart';
 
 class Selfcare extends StatelessWidget {
-  final List<Exercise> exercises = [
-    Exercise(
-      image: 'assets/images/image001.jpg',
-      title: 'Easy Start',
-      time: '5 min',
-      difficult: 'Low',
-    ),
-    Exercise(
-      image: 'assets/images/image002.jpg',
-      title: 'Medium Start',
-      time: '10 min',
-      difficult: 'Medium',
-    ),
-    Exercise(
-      image: 'assets/images/image003.jpg',
-      title: 'Pro Start',
-      time: '25 min',
-      difficult: 'High',
-    )
-  ];
-
-  List<Widget> generateList(BuildContext context) {
-    List<Widget> list = [];
-    int count = 0;
-    exercises.forEach((exercise) {
-      Widget element = Container(
-        margin: EdgeInsets.only(right: 20.0),
-        child: GestureDetector(
-          child: ImageCardWithBasicFooter(
-            exercise: exercise,
-            tag: 'imageHeader$count',
-            imageWidth: 0,
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) {
-                  return ActivityDetail(
-                    exercise: exercise,
-                    tag: 'imageHeader$count',
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      );
-      list.add(element);
-      count++;
-    });
-    return list;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,12 +44,65 @@ class Selfcare extends StatelessWidget {
                         fontSize: 13),
                   ),
                 ),
-                MainCardPrograms(
-                  title: 'Videos',
-                  time: 'Add 1',
-                  image: 'assets/images/videos.jpg',
-                  widget: Text(""),
-                ), // MainCard
+
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("videos")
+                        .snapshots(),
+                    builder: (builder,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshots) {
+                      var dataRef = snapshots.data;
+
+                      if (snapshots.hasError) {
+                        return Text('Something went wrong');
+                      }
+
+                      if (snapshots.connectionState ==
+                          ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+
+                      if (snapshots.data!.docs.length == 0) {
+                        return Text("No videos yet",
+                            style: TextStyle(
+                                fontFamily: "Geometria",
+                                fontSize: 18,
+                                color: Colors.black));
+                      }
+
+                      return Section(
+                        horizontalList: [
+                          for (int k = 0;
+                              k <= snapshots.data!.docs.length - 1;
+                              k++)
+                            Container(
+                              child: MainCardPrograms(
+                                title: dataRef?.docs[k]['title'],
+                                link: dataRef?.docs[k]['title'],
+                                time: "",
+                                image: dataRef?.docs[k]['thumbnil'],
+                                widget: Text(""),
+                              ),
+                            ),
+                        ],
+                        title: 'Selfcare Videos',
+                      );
+                    }),
+                // MainCardPrograms(
+                //   title: 'Videos',
+                //   time: 'Add 1',
+                //   image: 'assets/images/videos.jpg',
+                //   widget: Text(""),
+                // ),
+                // MainCardPrograms(
+                //   title: 'Videos',
+                //   time: 'Add 1',
+                //   image: 'assets/images/videos.jpg',
+                //   widget: Text(""),
+                // ),
+
+                // MainCard
 
                 Container(
                   margin: EdgeInsets.only(top: 50.0),
@@ -111,23 +112,66 @@ class Selfcare extends StatelessWidget {
                   ),
                   child: Column(
                     children: <Widget>[
-                      Section(
-                        horizontalList: <Widget>[
-                          DailyTip(),
-                          DailyTip(),
-                          DailyTip(),
-                        ],
-                        title: 'Selfcare tips',
-                      ),
+                      StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection("tips")
+                              .snapshots(),
+                          builder: (builder,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshots) {
+                            var dataRef = snapshots.data;
+
+                            if (snapshots.hasError) {
+                              return Text('Something went wrong');
+                            }
+
+                            if (snapshots.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
+
+                            if (snapshots.data!.docs.length == 0) {
+                              return Text("No videos yet",
+                                  style: TextStyle(
+                                      fontFamily: "Geometria",
+                                      fontSize: 18,
+                                      color: Colors.black));
+                            }
+
+                            return Section(
+                              horizontalList: [
+                                for (int k = 0;
+                                    k <= snapshots.data!.docs.length - 1;
+                                    k++)
+                                  if (dataRef?.docs[k]['type'] == "Selfcare")
+                                    Container(
+                                      width: size.width,
+                                      child: DailyTip(
+                                          title: dataRef?.docs[k]['title'],
+                                          image: dataRef?.docs[k]['image'],
+                                          subtitle: dataRef?.docs[k]['link']),
+                                    ),
+                              ],
+                              title: 'Selfcare Videos',
+                            );
+                          }),
+                      // Section(
+                      //   horizontalList: <Widget>[
+                      //     DailyTip(),
+                      //     DailyTip(),
+                      //     DailyTip(),
+                      //   ],
+                      //   title: 'Selfcare Tips',
+                      // ),
                     ],
                   ),
                 ),
-                MainCardPrograms(
-                  title: 'Skin Care',
-                  time: 'Add 1',
-                  image: 'assets/images/image001.jpg',
-                  widget: Text(""),
-                ), //
+                // MainCardPrograms(
+                //   title: 'Skin Care',
+                //   time: 'Add 1',
+                //   image: 'assets/images/image001.jpg',
+                //   widget: Text(""),
+                // ), //
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitness/components/utils/color_constant.dart';
 import 'package:flutter/material.dart';
 
@@ -58,7 +59,8 @@ class ImageCardWithInternal extends StatelessWidget {
         margin: EdgeInsets.only(right: 15.0, bottom: 5),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(this.image),
+            image: CachedNetworkImageProvider(
+                image.toString()), //AssetImage(this.image),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.all(

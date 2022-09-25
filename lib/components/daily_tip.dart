@@ -1,12 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class DailyTip extends StatelessWidget {
-
-  final Map<String, String> element = {
-    'title': '3 Main workout tips',
-    'subtitle': 'The American Council on Exercises (ACE) recently surveyed 3,000 ACE-certificated personal trainers about the best!',
-    'image': 'assets/images/image011.jpg',
-  };
+  String title, subtitle, image;
+  DailyTip({required this.title, required this.subtitle, required this.image});
+  // final Map<String, String> element = {
+  //   'title': '3 Main workout tips',
+  //   'subtitle':
+  //       'The American Council on Exercises (ACE) recently surveyed 3,000 ACE-certificated personal trainers about the best!',
+  //   'image': 'assets/images/image011.jpg',
+  // };
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class DailyTip extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(this.element['image']!),
+              image: CachedNetworkImageProvider(image),
               fit: BoxFit.fill,
             ),
             borderRadius: BorderRadius.all(
@@ -32,38 +35,45 @@ class DailyTip extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          this.element['title']!,
-          style: TextStyle(fontSize: 14.0),
-        ),
-        Container(
-          width: width,
-          margin: EdgeInsets.only(top: 10.0),
+        SizedBox(
+          width: 310,
           child: Text(
-            this.element['subtitle']!,
-            style: TextStyle(
-              color: Colors.black45,
-              fontSize: 14.0,
-            ),
+            title,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14.0),
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(top: 10.0),
-          padding: EdgeInsets.symmetric(
-            vertical: 5.0,
-            horizontal: 15.0,
-          ),
-          child: Text(
-            'More',
-            style: TextStyle(
-              color: Colors.white,
+        // Container(
+        //   width: width,
+        //   margin: EdgeInsets.only(top: 10.0),
+        //   child: Text(
+        //     this.element['subtitle']!,
+        //     style: TextStyle(
+        //       color: Colors.black45,
+        //       fontSize: 14.0,
+        //     ),
+        //   ),
+        // ),
+        InkWell(
+          onTap: () {},
+          child: Container(
+            margin: EdgeInsets.only(top: 10.0),
+            padding: EdgeInsets.symmetric(
+              vertical: 5.0,
+              horizontal: 15.0,
             ),
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(20.0),
+            child: Text(
+              'More',
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
-            color: Colors.lightBlue,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
+              ),
+              color: Colors.lightBlue,
+            ),
           ),
         ),
       ],

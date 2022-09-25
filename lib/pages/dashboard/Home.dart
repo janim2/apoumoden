@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness/components/daily_tip.dart';
 import 'package:fitness/components/image_card_with_basic_footer.dart';
 import 'package:fitness/components/image_card_with_internal.dart';
@@ -5,73 +6,92 @@ import 'package:fitness/components/main_card_programs.dart';
 import 'package:fitness/components/user_photo.dart';
 import 'package:fitness/components/user_tip.dart';
 import 'package:fitness/components/utils/color_constant.dart';
+import 'package:fitness/core/helpers/functions.dart';
 import 'package:fitness/models/exercise.dart';
 import 'package:fitness/pages/activity_detail.dart';
 import 'package:fitness/widgets/alert.dart';
 import 'package:fitness/widgets/popup_dialog.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../backend/profile/updateProfile.dart';
 import '../../components/Header.dart';
 import '../../components/Section.dart';
 import '../../components/utils/math_utils.dart';
 import '../../widgets/info_banner.dart';
 
-class Home extends StatelessWidget {
-  String goal = 'Losing weight';
+class Home extends StatefulWidget {
+  @override
+  HomeState createState() => HomeState();
+}
 
-  final List<Exercise> exercises = [
-    Exercise(
-      image: 'assets/images/image001.jpg',
-      title: 'Easy Start',
-      time: '5 min',
-      difficult: 'Low',
-    ),
-    Exercise(
-      image: 'assets/images/image002.jpg',
-      title: 'Medium Start',
-      time: '10 min',
-      difficult: 'Medium',
-    ),
-    Exercise(
-      image: 'assets/images/image003.jpg',
-      title: 'Pro Start',
-      time: '25 min',
-      difficult: 'High',
-    )
-  ];
+class HomeState extends State<Home> {
+  String goal = '';
+  int cups_per_day = 8;
+  int cups_drank_today = 0;
+  String user_id = "";
+  String today = "";
+  int count = 0;
 
-  List<Widget> generateList(BuildContext context) {
-    List<Widget> list = [];
-    int count = 0;
-    exercises.forEach((exercise) {
-      Widget element = Container(
-        margin: EdgeInsets.only(right: 20.0),
-        child: GestureDetector(
-          child: ImageCardWithBasicFooter(
-            exercise: exercise,
-            tag: 'imageHeader$count',
-            imageWidth: 0,
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) {
-                  return ActivityDetail(
-                    exercise: exercise,
-                    tag: 'imageHeader$count',
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      );
-      list.add(element);
-      count++;
-    });
-    return list;
+  // final List<Exercise> exercises = [
+  //   Exercise(
+  //     image: 'assets/images/image001.jpg',
+  //     title: 'Easy Start',
+  //     time: '5 min',
+  //     difficult: 'Low',
+  //   ),
+  //   Exercise(
+  //     image: 'assets/images/image002.jpg',
+  //     title: 'Medium Start',
+  //     time: '10 min',
+  //     difficult: 'Medium',
+  //   ),
+  //   Exercise(
+  //     image: 'assets/images/image003.jpg',
+  //     title: 'Pro Start',
+  //     time: '25 min',
+  //     difficult: 'High',
+  //   )
+  // ];
+
+  // List<Widget> generateList(BuildContext context) {
+  //   List<Widget> list = [];
+  //   int count = 0;
+  //   exercises.forEach((exercise) {
+  //     Widget element = Container(
+  //       margin: EdgeInsets.only(right: 20.0),
+  //       child: GestureDetector(
+  //         child: ImageCardWithBasicFooter(
+  //           exercise: exercise,
+  //           tag: 'imageHeader$count',
+  //           imageWidth: 0,
+  //         ),
+  //         onTap: () {
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (_) {
+  //                 return ActivityDetail(
+  //                   exercise: exercise,
+  //                   tag: 'imageHeader$count',
+  //                 );
+  //               },
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     );
+  //     list.add(element);
+  //     count++;
+  //   });
+  //   return list;
+  // }
+
+  @override
+  void initState() {
+    SetToday();
+    super.initState();
   }
 
   @override
@@ -130,16 +150,20 @@ class Home extends StatelessWidget {
                 //   ),
                 // ),
                 MainCardPrograms(
-                  title: '1/8 cups today',
+                  title: '$cups_drank_today/$cups_per_day cups today',
                   time: 'Add 1',
+                  link: "",
                   image: 'assets/images/water.jpg',
                   widget: GestureDetector(
                     onTap: () {
-                      showAlertDialog(
-                          context,
-                          "Water",
+                      showAlertDialog(context, "Water",
                           "Clicking continue confirms that you have drank a cup of water",
-                          () {});
+                          () {
+                        UpdateWaterDrunk(context,
+                            user_id: user_id,
+                            cups_drank_today: cups_drank_today,
+                            cups_per_day: cups_per_day);
+                      });
                     },
                     child: Icon(
                       Icons.add_box,
@@ -185,39 +209,69 @@ class Home extends StatelessWidget {
                 //   horizontalList: this.generateList(context),
                 // ),
                 Section(
-                  title: goal,
+                  title: "Exercises for $goal",
                   horizontalList: <Widget>[
-                    ImageCardWithInternal(
-                      image: 'assets/images/image001.jpg',
-                      title: 'Cardio \nWorkout',
-                      duration: '7 min',
-                      ontap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ActivityDetail(
-                                  exercise: Exercise(
-                                      title: "Push ups",
-                                      time: "2 mins",
-                                      difficult: "Easy",
-                                      image: "assets/images/image001.jpg"),
-                                  tag: "tag");
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    ImageCardWithInternal(
-                      image: 'assets/images/image002.jpg',
-                      title: 'Core \nWorkout',
-                      duration: '7 min',
-                    ),
-                    ImageCardWithInternal(
-                      image: 'assets/images/image003.jpg',
-                      title: 'Stretch \nWorkout',
-                      duration: '7 min',
-                    ),
+                    StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("exercises")
+                            .snapshots(),
+                        builder: (builder,
+                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                snapshots) {
+                          var dataRef = snapshots.data;
+
+                          if (snapshots.hasError) {
+                            return Text('Something went wrong');
+                          }
+
+                          if (snapshots.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          }
+
+                          if (snapshots.data!.docs.length == 0) {
+                            return Text("No exercises for $goal",
+                                style: TextStyle(
+                                    fontFamily: "Geometria",
+                                    fontSize: 18,
+                                    color: Colors.black));
+                          }
+
+                          return Column(
+                            children: [
+                              for (int k = 0;
+                                  k <= snapshots.data!.docs.length - 1;
+                                  k++)
+                                if (dataRef?.docs[k]['goal'] == goal)
+                                  Container(
+                                    child: ImageCardWithInternal(
+                                      image: dataRef?.docs[k]['image'],
+                                      title: dataRef?.docs[k]['title'],
+                                      duration: dataRef?.docs[k]['duration'],
+                                      ontap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return ActivityDetail(
+                                                  exercise: Exercise(
+                                                      title: dataRef?.docs[k]
+                                                          ['title'],
+                                                      time: dataRef?.docs[k]
+                                                          ['duration'],
+                                                      difficult: "Easy",
+                                                      image: dataRef?.docs[k]
+                                                          ['image']),
+                                                  tag: "tag");
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                            ],
+                          );
+                        }),
                   ],
                 ),
                 Container(
@@ -258,5 +312,48 @@ class Home extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> SetToday() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setString("today", dateFormat(currentTimestamp()));
+    // today = dateFormat(currentTimestamp());
+    FetchFromSharedPreferences(prefs);
+  }
+
+  Future<void> FetchFromSharedPreferences(SharedPreferences prefs) async {
+    setState(() {
+      goal = prefs.getString("goal")!;
+      cups_per_day = prefs.getInt("cups_per_day")!;
+      cups_drank_today = prefs.getInt("cups_drank_today")!;
+      user_id = prefs.getString("user_id")!;
+    });
+
+    UpdateNumberofCupsDrank(prefs);
+  }
+
+  Future<void> UpdateNumberofCupsDrank(prefs) async {
+    Stream<QuerySnapshot> stream =
+        FirebaseFirestore.instance.collection("users").snapshots();
+    stream.forEach((QuerySnapshot element) async {
+      if (element == null) return;
+
+      for (int count = 0; count < element.docs.length; count++) {
+        // print(element.docs[count].data());
+        if (element.docs[count].get('user_id') == prefs.getString("user_id")) {
+          // if (today == dateFormat(currentTimestamp())) {
+          setState(() {
+            prefs.setInt("cups_drank_today",
+                element.docs[count].get('cups_drank_today'));
+          });
+          // } else {
+          //   setState(() {
+          //     prefs.setInt("cups_drank_today", 0);
+          //     cups_drank_today = 0;
+          //   });
+          // }
+        }
+      }
+    });
   }
 }

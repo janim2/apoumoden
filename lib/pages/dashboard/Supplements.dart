@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness/components/daily_tip.dart';
 import 'package:fitness/components/image_card_with_basic_footer.dart';
 import 'package:fitness/components/image_card_with_internal.dart';
@@ -8,67 +9,25 @@ import 'package:fitness/models/exercise.dart';
 import 'package:fitness/pages/activity_detail.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/Header.dart';
 import '../../components/Section.dart';
 import '../../components/utils/color_constant.dart';
 import '../../widgets/info_banner.dart';
 
-class Supplements extends StatelessWidget {
-  final String goal = 'Weight loss';
+class Supplements extends StatefulWidget {
+  @override
+  SupplementsState createState() => SupplementsState();
+}
 
-  final List<Exercise> exercises = [
-    Exercise(
-      image: 'assets/images/image001.jpg',
-      title: 'Easy Start',
-      time: '5 min',
-      difficult: 'Low',
-    ),
-    Exercise(
-      image: 'assets/images/image002.jpg',
-      title: 'Medium Start',
-      time: '10 min',
-      difficult: 'Medium',
-    ),
-    Exercise(
-      image: 'assets/images/image003.jpg',
-      title: 'Pro Start',
-      time: '25 min',
-      difficult: 'High',
-    )
-  ];
+class SupplementsState extends State<Supplements> {
+  String goal = '';
 
-  List<Widget> generateList(BuildContext context) {
-    List<Widget> list = [];
-    int count = 0;
-    exercises.forEach((exercise) {
-      Widget element = Container(
-        margin: EdgeInsets.only(right: 20.0),
-        child: GestureDetector(
-          child: ImageCardWithBasicFooter(
-            exercise: exercise,
-            tag: 'imageHeader$count',
-            imageWidth: 0,
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) {
-                  return ActivityDetail(
-                    exercise: exercise,
-                    tag: 'imageHeader$count',
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      );
-      list.add(element);
-      count++;
-    });
-    return list;
+  @override
+  void initState() {
+    FetchFromSharedPreferences();
+    super.initState();
   }
 
   @override
@@ -98,21 +57,60 @@ class Supplements extends StatelessWidget {
                         fontSize: 13),
                   ),
                 ),
-                ImageCardWithInternal(
-                  image: 'assets/images/supplements.png',
-                  title: 'Calcium',
-                  duration: '2x/day',
-                ),
-                ImageCardWithInternal(
-                  image: 'assets/images/supplements.png',
-                  title: 'Guar gum',
-                  duration: '1x/day',
-                ),
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("supplements")
+                        .snapshots(),
+                    builder: (builder,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshots) {
+                      var dataRef = snapshots.data;
+
+                      if (snapshots.hasError) {
+                        return Text('Something went wrong');
+                      }
+
+                      if (snapshots.connectionState ==
+                          ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+
+                      if (snapshots.data!.docs.length == 0) {
+                        return Text("No supplements yet",
+                            style: TextStyle(
+                                fontFamily: "Geometria",
+                                fontSize: 18,
+                                color: Colors.black));
+                      }
+
+                      return Column(
+                        children: [
+                          for (int k = 0;
+                              k <= snapshots.data!.docs.length - 1;
+                              k++)
+                            if (dataRef?.docs[k]['goal'] == goal)
+                              Container(
+                                child: ImageCardWithInternal(
+                                  image: 'assets/images/supplements.png',
+                                  title: 'Calcium',
+                                  duration: '2x/day',
+                                ),
+                              ),
+                        ],
+                      );
+                    }),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> FetchFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      goal = prefs.getString("goal")!;
+    });
   }
 }

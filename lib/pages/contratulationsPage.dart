@@ -9,16 +9,16 @@ import 'package:flutter_rounded_progress_bar/rounded_progress_bar_style.dart';
 
 import '../../components/Header.dart';
 
-class AcceptedGoal extends StatefulWidget {
-  String selectedGoal;
+class CongratulationsPage extends StatefulWidget {
+  String message;
 
-  AcceptedGoal(this.selectedGoal, {Key? key}) : super(key: key);
+  CongratulationsPage(this.message, {Key? key}) : super(key: key);
 
   @override
-  AcceptedGoalState createState() => AcceptedGoalState();
+  CongratulationsPageState createState() => CongratulationsPageState();
 }
 
-class AcceptedGoalState extends State<AcceptedGoal> {
+class CongratulationsPageState extends State<CongratulationsPage> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -52,7 +52,8 @@ class AcceptedGoalState extends State<AcceptedGoal> {
                       ),
                       Center(
                         child: Text(
-                          widget.selectedGoal,
+                          widget.message,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w900,
@@ -60,26 +61,14 @@ class AcceptedGoalState extends State<AcceptedGoal> {
                           ),
                         ),
                       ),
-                      Text(
-                        'You\'re about to ${widget.selectedGoal}. Apumoden is the best app for achieving your health goal',
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                        ),
-                      ),
+
                       SizedBox(
                         height: 40,
                       ),
                       CurvedButton(
-                        textonButton: "Begin",
+                        textonButton: "Back to Home",
                         ontap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return Dashboard();
-                              },
-                            ),
-                          );
+                          Navigator.of(context).pop();
                         },
                       )
                       // Container(

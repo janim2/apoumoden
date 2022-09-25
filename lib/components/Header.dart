@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-
   final String title;
   final Widget rightSide;
 
@@ -18,7 +17,7 @@ class Header extends StatelessWidget {
           child: Text(
             this.title,
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 23,
               color: Colors.grey[600],
               fontWeight: FontWeight.w700,
             ),

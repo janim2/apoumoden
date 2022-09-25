@@ -1,4 +1,4 @@
-import 'package:bezier_chart/bezier_chart.dart';
+// import 'package:bezier_chart/bezier_chart.dart';
 import 'package:fitness/components/circle_bedge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
@@ -17,7 +17,10 @@ class Results extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              Header('', rightSide: Text(""),),
+              Header(
+                '',
+                rightSide: Text(""),
+              ),
               Container(
                 color: Colors.white,
                 padding: EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 35.0),
@@ -152,32 +155,32 @@ class Results extends StatelessWidget {
                         color: Colors.grey,
                       ),
                     ),
-                    Container(
-                      height: 250.0,
-                      width: width - 40.0,
-                      margin: EdgeInsets.only(bottom: 30.0),
-                      child: BezierChart(
-                        bezierChartScale: BezierChartScale.CUSTOM,
-                        xAxisCustomValues: const [0, 3, 6, 9],
-                        series: const [
-                          BezierLine(
-                            lineColor: Color.fromRGBO(241, 227, 255, 1.0),
-                            lineStrokeWidth: 8.0,
-                            data: const [
-                              DataPoint<double>(value: 45, xAxis: 0),
-                              DataPoint<double>(value: 80, xAxis: 3),
-                              DataPoint<double>(value: 55, xAxis: 6),
-                              DataPoint<double>(value: 100, xAxis: 9)
-                            ],
-                          ),
-                        ],
-                        config: BezierChartConfig(
-                          xAxisTextStyle: TextStyle(color: Colors.blueGrey),
-                          startYAxisFromNonZeroValue: true,
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   height: 250.0,
+                    //   width: width - 40.0,
+                    //   margin: EdgeInsets.only(bottom: 30.0),
+                    //   child: BezierChart(
+                    //     bezierChartScale: BezierChartScale.CUSTOM,
+                    //     xAxisCustomValues: const [0, 3, 6, 9],
+                    //     series: const [
+                    //       BezierLine(
+                    //         lineColor: Color.fromRGBO(241, 227, 255, 1.0),
+                    //         lineStrokeWidth: 8.0,
+                    //         data: const [
+                    //           DataPoint<double>(value: 45, xAxis: 0),
+                    //           DataPoint<double>(value: 80, xAxis: 3),
+                    //           DataPoint<double>(value: 55, xAxis: 6),
+                    //           DataPoint<double>(value: 100, xAxis: 9)
+                    //         ],
+                    //       ),
+                    //     ],
+                    //     config: BezierChartConfig(
+                    //       xAxisTextStyle: TextStyle(color: Colors.blueGrey),
+                    //       startYAxisFromNonZeroValue: true,
+                    //       backgroundColor: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
                     Container(
                       child: Row(
                         children: <Widget>[
