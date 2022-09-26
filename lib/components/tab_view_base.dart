@@ -3,12 +3,20 @@ import 'package:fitness/components/image_card_with_basic_footer.dart';
 import 'package:fitness/data/Dishes.dart';
 import 'package:fitness/models/exercise.dart';
 import 'package:fitness/pages/app_goal.dart';
+import 'package:fitness/pages/food_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class TabViewBase extends StatelessWidget {
+class TabViewBase extends StatefulWidget {
   final String tabName;
 
   TabViewBase({required this.tabName});
+
+  TabViewBaseState createState() => TabViewBaseState();
+}
+
+class TabViewBaseState extends State<TabViewBase> {
+  String goal = "";
 
   Exercise exercise = Exercise(
     image: "assets/images/image012.jpg",
@@ -16,8 +24,6 @@ class TabViewBase extends StatelessWidget {
     time: "25 min",
     difficult: "426 kCal",
   );
-
-  String goal = 'Goal here';
 
   // List<Widget> _renderItem(Size size) {
   //   return List<Widget>.generate(dishes.length, (index) {
@@ -40,6 +46,13 @@ class TabViewBase extends StatelessWidget {
   // }
 
   @override
+  void initState() {
+    FetchFromSharedPreferences();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
@@ -59,7 +72,7 @@ class TabViewBase extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Change Goal', // + this.tabName,
+                    'Change Goal', // + widget.tabName + goal,
                     style: TextStyle(
                       fontSize: 16.0,
                       color: Color.fromRGBO(122, 158, 255, 1.0),
@@ -101,7 +114,7 @@ class TabViewBase extends StatelessWidget {
                     }
 
                     if (snapshots.data!.docs.length == 0) {
-                      return Text("No ${this.tabName} for $goal",
+                      return Text("No ${widget.tabName} for $goal",
                           style: TextStyle(
                               fontFamily: "Geometria",
                               fontSize: 18,
@@ -115,18 +128,37 @@ class TabViewBase extends StatelessWidget {
                             k++)
                           // goal == 'Gain Weight' ? goal == 'Lose Weight' : goal = goal
                           if (dataRef?.docs[k]['goal'] == goal &&
-                              dataRef?.docs[k]['time_of_day'] == tabName)
+                              dataRef?.docs[k]['time_of_day'] == widget.tabName)
                             Container(
-                              child: ImageCardWithBasicFooter(
-                                exercise: Exercise(
-                                  image: dataRef?.docs[k]['image'],
-                                  title: dataRef?.docs[k]['title'],
-                                  time: dataRef?.docs[k]['time'],
-                                  difficult:
-                                      "${dataRef?.docs[k]['calories']} kCal",
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return FoodDetail(
+                                            image: dataRef?.docs[k]['image'],
+                                            name: dataRef?.docs[k]['title'],
+                                            preptime: dataRef?.docs[k]['time'],
+                                            calories: dataRef?.docs[k]
+                                                ['calories'],
+                                            description:
+                                                "Recipe would be uploaded soon");
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: ImageCardWithBasicFooter(
+                                  exercise: Exercise(
+                                    image: dataRef?.docs[k]['image'],
+                                    title: dataRef?.docs[k]['title'],
+                                    time: dataRef?.docs[k]['time'],
+                                    difficult:
+                                        "${dataRef?.docs[k]['calories']} kCal",
+                                  ),
+                                  tag: "4",
+                                  imageWidth: size.width,
                                 ),
-                                tag: "4",
-                                imageWidth: size.width,
                               ),
                             ),
                       ],
@@ -147,5 +179,10 @@ class TabViewBase extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  FetchFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    goal = prefs.getString("goal")!;
   }
 }

@@ -3,6 +3,7 @@ import 'package:fitness/backend/auth/logout.dart';
 import 'package:fitness/backend/profile/updateProfile.dart';
 import 'package:fitness/components/circle_bedge.dart';
 import 'package:fitness/components/utils/color_constant.dart';
+import 'package:fitness/pages/helpPage.dart';
 import 'package:fitness/widgets/curved_button.dart';
 import 'package:fitness/widgets/small_button.dart';
 import 'package:fitness/widgets/toast.dart';
@@ -80,9 +81,24 @@ class ProfileState extends State<Profile> {
             child: SafeArea(
               child: Column(
                 children: <Widget>[
-                  Header(
-                    'Profile',
-                    rightSide: Text(""),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(23.0),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: ColorConstant.primary,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      Header('Profile', rightSide: Text("")),
+                    ],
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
@@ -369,7 +385,16 @@ class ProfileState extends State<Profile> {
                         ])),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return HelpPage();
+                          },
+                        ),
+                      );
+                    },
                     child: Container(
                       color: Colors.white,
                       padding: EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 0),
