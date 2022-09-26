@@ -6,14 +6,19 @@ import 'package:fitness/pages/activity_timer.dart';
 import 'package:fitness/widgets/toast.dart';
 import 'package:flutter/material.dart';
 
-class ActivityDetail extends StatelessWidget {
-  final String tag;
-  final Exercise exercise;
+class SupplementDetail extends StatelessWidget {
+  final String image;
+  final String name;
+  final String dosage;
+  final String purpose;
+  final String description;
 
-  ActivityDetail({
-    required this.exercise,
-    required this.tag,
-  });
+  SupplementDetail(
+      {required this.image,
+      required this.name,
+      required this.dosage,
+      required this.purpose,
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +31,14 @@ class ActivityDetail extends StatelessWidget {
             Stack(
               children: <Widget>[
                 Hero(
-                  tag: this.tag,
+                  tag: "",
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 270,
                     child: CachedNetworkImage(
-                      imageUrl: this.exercise.image,
+                      imageUrl: image,
                       fit: BoxFit.fitHeight,
+                      width: size.width,
                     ),
                   ),
                 ),
@@ -68,7 +74,7 @@ class ActivityDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        this.exercise.title,
+                        name,
                         style: TextStyle(
                           fontSize: 22.0,
                           color: Colors.blueGrey,
@@ -77,7 +83,7 @@ class ActivityDetail extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(20.0),
                         margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                        height: 120.0,
+                        height: 90.0,
                         decoration: BoxDecoration(
                           color: Color.fromRGBO(231, 241, 255, 1.0),
                           borderRadius: BorderRadius.circular(15.0),
@@ -85,28 +91,24 @@ class ActivityDetail extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.only(right: 50.0),
+                              margin: EdgeInsets.only(right: 55.0),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    'Time',
+                                    'Dosage',
                                     style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
                                         fontSize: 14.0,
                                         color: Colors.blueGrey[300]),
                                   ),
-                                  SizedBox(
-                                    width: size.width / 3,
-                                    child: Text(
-                                      '${this.exercise.time}',
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.lightBlue,
-                                          fontWeight: FontWeight.w900),
-                                    ),
+                                  Text(
+                                    '${dosage}x/day',
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.lightBlue,
+                                        fontWeight: FontWeight.w900),
                                   ),
                                 ],
                               ),
@@ -119,14 +121,14 @@ class ActivityDetail extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    'Intensity',
+                                    'Purpose',
                                     style: TextStyle(
                                       fontSize: 14.0,
                                       color: Colors.blueGrey[300],
                                     ),
                                   ),
                                   Text(
-                                    this.exercise.difficult,
+                                    purpose,
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       color: Colors.lightBlue,
@@ -137,6 +139,13 @@ class ActivityDetail extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      Text(
+                        description,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.blueGrey,
                         ),
                       ),
                       // Container(
@@ -184,7 +193,7 @@ class ActivityDetail extends StatelessWidget {
                 ),
               ]),
           child: Text(
-            'Start',
+            'Buy',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 22.0,

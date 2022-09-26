@@ -4,6 +4,8 @@ import 'package:fitness/widgets/curved_button.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../core/helpers/functions.dart';
+
 class MainCardPrograms extends StatelessWidget {
   final String title, time, link, image;
   final Widget widget;
@@ -25,7 +27,9 @@ class MainCardPrograms extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        link == "" ? "" : launchAUrl(link);
+      },
       child: Container(
         child: Align(
           alignment: Alignment.bottomCenter,
@@ -35,7 +39,7 @@ class MainCardPrograms extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 SizedBox(
-                  width: 270,
+                  width: 210,
                   child: Text(
                     title,
                     overflow: TextOverflow.ellipsis,

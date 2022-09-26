@@ -71,6 +71,12 @@ saveToPrefs(BuildContext context, SharedPreferences prefs,
   prefs.setString("email", documentSnapshot.get("email"));
   prefs.setString("phone", documentSnapshot.get("phone") ?? "");
   prefs.setString("goal", documentSnapshot.get("goal") ?? "");
+  prefs.setString("weight_goal", documentSnapshot.get("weight_goal") ?? "");
+  prefs.setString("height", documentSnapshot.get("height") ?? "");
+  prefs.setString("dob", documentSnapshot.get("dob") ?? "");
+  prefs.setString(
+      "current_weight", documentSnapshot.get("current_weight") ?? "");
+
   prefs.setInt("cups_per_day", documentSnapshot.get("cups_per_day") ?? 8);
   prefs.setInt(
       "cups_drank_today", documentSnapshot.get("cups_drank_today") ?? 0);

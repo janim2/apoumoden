@@ -7,6 +7,7 @@ import 'package:fitness/components/user_photo.dart';
 import 'package:fitness/components/user_tip.dart';
 import 'package:fitness/models/exercise.dart';
 import 'package:fitness/pages/activity_detail.dart';
+import 'package:fitness/pages/supplement_detail.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,10 +91,30 @@ class SupplementsState extends State<Supplements> {
                               k++)
                             if (dataRef?.docs[k]['goal'] == goal)
                               Container(
-                                child: ImageCardWithInternal(
-                                  image: 'assets/images/supplements.png',
-                                  title: 'Calcium',
-                                  duration: '2x/day',
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return SupplementDetail(
+                                              image: dataRef?.docs[k]['image'],
+                                              name: dataRef?.docs[k]['title'],
+                                              dosage: dataRef?.docs[k]
+                                                  ['dosage'],
+                                              purpose: dataRef?.docs[k]['goal'],
+                                              description: dataRef?.docs[k]
+                                                  ['description']);
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: ImageCardWithInternal(
+                                    image: dataRef?.docs[k]['image'],
+                                    title: dataRef?.docs[k]['title'],
+                                    duration:
+                                        '${dataRef?.docs[k]['dosage']}x/day',
+                                  ),
                                 ),
                               ),
                         ],

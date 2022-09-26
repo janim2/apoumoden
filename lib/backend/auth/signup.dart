@@ -59,7 +59,11 @@ addUser(BuildContext context, String profile_image, String user_id,
     "phone": "",
     "goal": "",
     "cups_per_day": 8,
-    "cups_drank_today": 0
+    "cups_drank_today": 0,
+    "weight_goal": "",
+    "current_weight": "",
+    "height": "",
+    "dob": ""
   };
 
   await documentReferencer

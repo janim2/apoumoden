@@ -59,7 +59,7 @@ class TabViewBase extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Change Goal' + this.tabName,
+                    'Change Goal', // + this.tabName,
                     style: TextStyle(
                       fontSize: 16.0,
                       color: Color.fromRGBO(122, 158, 255, 1.0),
@@ -113,8 +113,9 @@ class TabViewBase extends StatelessWidget {
                         for (int k = 0;
                             k <= snapshots.data!.docs.length - 1;
                             k++)
-                          if (dataRef?.docs[k]['goal'] == goal ||
-                              dataRef?.docs[k]['type'] == tabName)
+                          // goal == 'Gain Weight' ? goal == 'Lose Weight' : goal = goal
+                          if (dataRef?.docs[k]['goal'] == goal &&
+                              dataRef?.docs[k]['time_of_day'] == tabName)
                             Container(
                               child: ImageCardWithBasicFooter(
                                 exercise: Exercise(

@@ -15,7 +15,7 @@ import 'package:fitness/widgets/popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../backend/profile/updateProfile.dart';
+import '../../backend/water/updateWaterDrunk.dart';
 import '../../components/Header.dart';
 import '../../components/Section.dart';
 import '../../components/utils/math_utils.dart';
@@ -153,7 +153,8 @@ class HomeState extends State<Home> {
                   title: '$cups_drank_today/$cups_per_day cups today',
                   time: 'Add 1',
                   link: "",
-                  image: 'assets/images/water.jpg',
+                  image:
+                      'https://firebasestorage.googleapis.com/v0/b/apoumoden.appspot.com/o/food%2Fwater.jpg?alt=media&token=ff5af449-386e-4101-b3a7-e41a64b1e707',
                   widget: GestureDetector(
                     onTap: () {
                       showAlertDialog(context, "Water",
@@ -186,24 +187,24 @@ class HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.all(25.0),
-                  width: size.width - 40.0,
-                  margin: EdgeInsets.only(bottom: 30.0),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(241, 227, 255, 1.0),
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Text(
-                    'Enter today\'s weight',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color.fromRGBO(190, 130, 255, 1.0),
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.all(25.0),
+                //   width: size.width - 40.0,
+                //   margin: EdgeInsets.only(bottom: 30.0),
+                //   decoration: BoxDecoration(
+                //     color: Color.fromRGBO(241, 227, 255, 1.0),
+                //     borderRadius: BorderRadius.circular(15.0),
+                //   ),
+                //   child: Text(
+                //     'Enter today\'s weight',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(
+                //       color: Color.fromRGBO(190, 130, 255, 1.0),
+                //       fontSize: 20.0,
+                //       fontWeight: FontWeight.w900,
+                //     ),
+                //   ),
+                // ),
                 // Section(
                 //   title: 'Fat burning',
                 //   horizontalList: this.generateList(context),
@@ -247,7 +248,7 @@ class HomeState extends State<Home> {
                                     child: ImageCardWithInternal(
                                       image: dataRef?.docs[k]['image'],
                                       title: dataRef?.docs[k]['title'],
-                                      duration: dataRef?.docs[k]['duration'],
+                                      duration: "3x/1 min",
                                       ontap: () {
                                         Navigator.push(
                                           context,

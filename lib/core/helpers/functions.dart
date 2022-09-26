@@ -30,14 +30,14 @@ launchCaller(String tel) async {
   }
 }
 
-// launchUrl(String url_) async {
-//   var url = Uri.parse(url_);
-//   if (await canLaunchUrl(url)) {
-//     await launchUrl(url_);
-//   } else {
-//     throw 'Could not launch $url';
-//   }
-// }
+launchAUrl(String url_) async {
+  var url = Uri.parse(url_);
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 dateFormat(Timestamp the_date) {
   DateTime dt = (the_date).toDate();

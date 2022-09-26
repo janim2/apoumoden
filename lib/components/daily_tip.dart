@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../core/helpers/functions.dart';
+
 class DailyTip extends StatelessWidget {
   String title, subtitle, image;
   DailyTip({required this.title, required this.subtitle, required this.image});
@@ -55,7 +57,9 @@ class DailyTip extends StatelessWidget {
         //   ),
         // ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            launchAUrl(subtitle);
+          },
           child: Container(
             margin: EdgeInsets.only(top: 10.0),
             padding: EdgeInsets.symmetric(

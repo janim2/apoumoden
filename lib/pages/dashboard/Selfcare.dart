@@ -79,7 +79,7 @@ class Selfcare extends StatelessWidget {
                             Container(
                               child: MainCardPrograms(
                                 title: dataRef?.docs[k]['title'],
-                                link: dataRef?.docs[k]['title'],
+                                link: dataRef?.docs[k]['link'],
                                 time: "",
                                 image: dataRef?.docs[k]['thumbnil'],
                                 widget: Text(""),
